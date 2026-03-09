@@ -1,0 +1,22 @@
+{
+  "indices": {
+    "SP500": {"name": "标普500", "price": 6740.0, "change": -90.5, "change_pct": -1.33},
+    "DOW": {"name": "道指", "price": 47501.0, "change": -450.2, "change_pct": -0.94},
+    "NASDAQ": {"name": "纳指", "price": 22387.0, "change": -361.5, "change_pct": -1.59},
+    "NIKKEI": {"name": "日经225", "price": 52728.0, "change": -2895.0, "change_pct": -5.20},
+    "KOSPI": {"name": "韩国KOSPI", "price": 5251.0, "change": -313.0, "change_pct": -5.96},
+    "HANGSENG": {"name": "恒生", "price": 25408.0, "change": -347.0, "change_pct": -1.35},
+    "SHANGHAI": {"name": "上证", "price": 4096.0, "change": -27.5, "change_pct": -0.67},
+    "DAX": {"name": "德国DAX", "price": 23200.0, "change": -389.0, "change_pct": -1.65},
+    "FTSE": {"name": "英国FTSE", "price": 10155.0, "change": -128.0, "change_pct": -1.25},
+    "CAC": {"name": "法国CAC", "price": 7844.0, "change": -149.0, "change_pct": -1.86}
+  },
+  "core": {
+    "DXY": {"name": "美元指数", "price": 99.35, "change": 0.37, "change_pct": 0.37},
+    "VIX": {"name": "VIX恐慌", "price": 31.82, "change": 2.32, "change_pct": 7.88},
+    "CRUDE": {"name": "原油", "price": 101.80, "change": 10.90, "change_pct": 11.99},
+    "GOLD": {"name": "黄金", "price": 5092.0, "change": -40.5, "change_pct": -0.79},
+    "US10Y": {"name": "美债10年", "price": 4.13, "change": -0.013, "change_pct": -0.31}
+  },
+  "last_updated": "2026-03-09T12:00:00"
+}

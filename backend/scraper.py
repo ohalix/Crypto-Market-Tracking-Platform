@@ -55,21 +55,44 @@ def parse_value(value_str):
 def get_yahoo_price(symbol):
     """从 Yahoo Finance 获取实时价格"""
     try:
-        url = f"{YAHOO_BASE}{symbol}"
-        params = {'interval': '1d', 'range': '1d'}
-        headers = {'User-Agent': 'Mozilla/5.0'}
+        # 使用 yfinance 风格的 API
+        url = f"https://query1.finance.yahoo.com/v8/finance/chart/{symbol}"
+        params = {
+            'interval': '1d',
+            'range': '2d',  # 获取2天数据来计算涨跌
+            'includeAdjustedClose': 'true'
+        }
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        }
         
         response = requests.get(url, params=params, headers=headers, timeout=10)
         data = response.json()
         
-        if 'chart' in data and 'result' in data['chart'] and data['chart']['result']:
+        if 'chart' in data and data['chart']['result']:
             result = data['chart']['result'][0]
             meta = result['meta']
             
+            # 获取当前价格
             price = meta.get('regularMarketPrice', 0)
-            prev_close = meta.get('previousClose', price)
-            change = price - prev_close
-            change_pct = (change / prev_close * 100) if prev_close else 0
+            
+            # 尝试从 meta 获取前收盘价
+            prev_close = meta.get('previousClose', 0)
+            
+            # 如果 meta 中没有，尝试从 timestamps 计算
+            if not prev_close and 'timestamp' in result and len(result['timestamp']) > 1:
+                timestamps = result['timestamp']
+                closes = result['indicators']['quote'][0]['close']
+                if len(closes) >= 2:
+                    prev_close = closes[-2] if closes[-2] else closes[-1]
+            
+            # 计算涨跌幅
+            if prev_close and price:
+                change = price - prev_close
+                change_pct = (change / prev_close) * 100
+            else:
+                change = 0
+                change_pct = 0
             
             return {
                 'price': price,
@@ -84,6 +107,7 @@ def get_yahoo_price(symbol):
 
 def get_global_markets():
     """获取全球市场行情"""
+    # 先尝试从 Yahoo 获取实时数据
     result = {
         'indices': {},
         'core': {},
@@ -107,6 +131,22 @@ def get_global_markets():
                 'name': info['name'],
                 **data
             }
+    
+    # 如果获取不到数据，使用缓存数据
+    if not result['indices'] or not result['core']:
+        cached = load_data('markets_cache')
+        if cached:
+            if not result['indices'] and 'indices' in cached:
+                result['indices'] = cached['indices']
+            if not result['core'] and 'core' in cached:
+                result['core'] = cached['core']
+    
+    # 保存到缓存
+    if result['indices'] or result['core']:
+        import json
+        filepath = os.path.join(DATA_DIR, 'markets_cache.json')
+        with open(filepath, 'w', encoding='utf-8') as f:
+            json.dump(result, f, ensure_ascii=False, indent=2)
     
     return result
 
