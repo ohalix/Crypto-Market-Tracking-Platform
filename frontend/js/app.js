@@ -157,15 +157,6 @@ function renderETFSummary(data, containerId) {
     `).join('');
 }
 
-// 计算每列的合计
-function calculateColumnTotals(dailyData, columns) {
-    const totals = {};
-    columns.forEach(col => {
-        totals[col] = dailyData.reduce((sum, row) => sum + (row[col] || 0), 0);
-    });
-    return totals;
-}
-
 // 渲染 ETF 表格
 function renderETFTable(data, tbodyId, coin) {
     const tbody = document.getElementById(tbodyId);
@@ -173,25 +164,6 @@ function renderETFTable(data, tbodyId, coin) {
         if (tbody) tbody.innerHTML = '<tr><td colspan="13">暂无数据</td></tr>';
         return;
     }
-
-    // 定义每列的字段名
-    let columns, headerCols;
-    if (coin === 'btc') {
-        columns = ['blackrock', 'fidelity', 'bitwise', 'ark', 'invesco', 'franklin', 'valkyrie', 'vaneck', 'wtree', 'grayscale_gb', 'grayscale_btc', 'total'];
-        headerCols = 13;
-    } else if (coin === 'eth') {
-        columns = ['blackrock', 'fidelity', 'bitwise', 'shares21', 'vaneck', 'invesco', 'franklin', 'grayscale_et', 'grayscale_eth', 'total'];
-        headerCols = 11;
-    } else if (coin === 'sol') {
-        columns = ['bitwise', 'vaneck1', 'vaneck2', 'vaneck3', 'franklin', 'grayscale', 'total'];
-        headerCols = 8;
-    } else if (coin === 'xrp') {
-        columns = ['canary', 'bitwise', 'franklin', 'shares21', 'grayscale', 'total'];
-        headerCols = 7;
-    }
-
-    // 计算合计
-    const totals = calculateColumnTotals(data.daily_data, columns);
 
     // 渲染数据行
     let html = data.daily_data.map(row => {
@@ -217,14 +189,17 @@ function renderETFTable(data, tbodyId, coin) {
         }).join('')}</tr>`;
     }).join('');
 
-    // 添加 Total 行
-    const totalCells = ['Total'].concat(columns.map(col => totals[col]));
-    html += `<tr class="total-row" style="font-weight: bold; background: rgba(255,255,255,0.1);">${totalCells.map((cell, idx) => {
-        if (idx === 0) return `<td>${cell}</td>`;
-        const value = parseFloat(cell) || 0;
-        const className = value > 0 ? 'positive' : value < 0 ? 'negative' : '';
-        return `<td class="${className}">${formatNumber(value)}</td>`;
-    }).join('')}</tr>`;
+    // 添加 Total 行（使用数据文件中的 summary 数据）
+    if (data.summary && data.summary.Total) {
+        const totalRow = data.summary.Total;
+        html += `<tr class="total-row" style="font-weight: bold; background: rgba(255,255,255,0.1);">${totalRow.map((cell, idx) => {
+            if (idx === 0) return `<td>${cell}</td>`;
+            const cleanCell = cell.toString().replace(/[(),]/g, '');
+            const value = parseFloat(cleanCell) || 0;
+            const className = value > 0 ? 'positive' : value < 0 ? 'negative' : '';
+            return `<td class="${className}">${formatNumber(value)}</td>`;
+        }).join('')}</tr>`;
+    }
 
     tbody.innerHTML = html;
 }
