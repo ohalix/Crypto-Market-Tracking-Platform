@@ -12,10 +12,10 @@
     "CAC": {"name": "法国CAC", "price": 7844.0, "change": -149.0, "change_pct": -1.86}
   },
   "core": {
-    "DXY": {"name": "美元指数", "price": 99.35, "change": 0.37, "change_pct": 0.37},
-    "VIX": {"name": "VIX恐慌", "price": 31.82, "change": 2.32, "change_pct": 7.88},
-    "CRUDE": {"name": "原油", "price": 101.80, "change": 10.90, "change_pct": 11.99},
-    "GOLD": {"name": "黄金", "price": 5092.0, "change": -40.5, "change_pct": -0.79},
+    "DXY": {"name": "美元指数", "price": 99.30, "change": 0.37, "change_pct": 0.37},
+    "VIX": {"name": "VIX恐慌", "price": 32.20, "change": 2.70, "change_pct": 9.19},
+    "CRUDE": {"name": "原油", "price": 103.51, "change": 10.90, "change_pct": 11.99},
+    "GOLD": {"name": "黄金", "price": 5095.90, "change": -40.5, "change_pct": -0.79},
     "US10Y": {"name": "美债10年", "price": 4.13, "change": -0.013, "change_pct": -0.31}
   },
   "last_updated": "2026-03-09T12:00:00"

@@ -106,15 +106,24 @@ def get_yahoo_price(symbol):
 
 
 def get_global_markets():
-    """获取全球市场行情"""
-    # 先尝试从 Yahoo 获取实时数据
+    """获取全球市场行情 - 优先使用缓存数据确保显示正常"""
+    # 先加载缓存数据
+    cached = load_data('markets_cache')
+    
     result = {
         'indices': {},
         'core': {},
         'last_updated': datetime.now().isoformat()
     }
     
-    # 获取全球股指
+    # 如果有缓存，先使用缓存数据
+    if cached:
+        if 'indices' in cached:
+            result['indices'] = cached['indices']
+        if 'core' in cached:
+            result['core'] = cached['core']
+    
+    # 尝试从 Yahoo 获取最新数据（更新缓存）
     for key, info in INDICES.items():
         data = get_yahoo_price(info['symbol'])
         if data:
@@ -123,7 +132,6 @@ def get_global_markets():
                 **data
             }
     
-    # 获取核心指标
     for key, info in CORE_INDICATORS.items():
         data = get_yahoo_price(info['symbol'])
         if data:
@@ -131,15 +139,6 @@ def get_global_markets():
                 'name': info['name'],
                 **data
             }
-    
-    # 如果获取不到数据，使用缓存数据
-    if not result['indices'] or not result['core']:
-        cached = load_data('markets_cache')
-        if cached:
-            if not result['indices'] and 'indices' in cached:
-                result['indices'] = cached['indices']
-            if not result['core'] and 'core' in cached:
-                result['core'] = cached['core']
     
     # 保存到缓存
     if result['indices'] or result['core']:
