@@ -3,11 +3,21 @@
  * 支持：全球股指、核心指标、加密货币、ETF数据
  */
 
-// 格式化数字
-function formatNumber(num) {
+// 格式化数字（带千位符）
+function formatNumber(num, useThousands = false) {
     if (num === 0) return '0.0';
-    const formatted = num.toFixed(1);
-    return num > 0 ? `+${formatted}` : formatted;
+    
+    const sign = num > 0 ? '+' : '';
+    const absNum = Math.abs(num);
+    
+    if (useThousands && absNum >= 1000) {
+        // 使用千位符
+        const formatted = absNum.toLocaleString('en-US', {minimumFractionDigits: 1, maximumFractionDigits: 1});
+        return sign + formatted;
+    } else {
+        const formatted = absNum.toFixed(1);
+        return sign + formatted;
+    }
 }
 
 // 格式化价格
@@ -140,7 +150,18 @@ function renderETFSummary(data, containerId) {
 
     // 取最新数据（数组最后一个）
     const latest = data.daily_data[data.daily_data.length - 1];
-    const totalInflow = data.daily_data.reduce((sum, d) => sum + (d.total || 0), 0);
+    
+    // 累计流入使用数据文件中的 Total 行最后一列（总净流入）
+    let totalInflow = 0;
+    if (data.summary && data.summary.Total) {
+        const totalRow = data.summary.Total;
+        const lastValue = totalRow[totalRow.length - 1];
+        totalInflow = parseFloat(lastValue.toString().replace(/[(),]/g, '')) || 0;
+    } else {
+        // 如果没有 summary，则计算 daily_data 的合计
+        totalInflow = data.daily_data.reduce((sum, d) => sum + (d.total || 0), 0);
+    }
+    
     const consecutiveDays = calculateConsecutiveDays(data.daily_data);
 
     const cards = [
@@ -152,7 +173,7 @@ function renderETFSummary(data, containerId) {
     container.innerHTML = cards.map(card => `
         <div class="summary-card">
             <h3>${card.title}</h3>
-            <div class="value ${card.class}">${card.isMoney ? formatNumber(card.value) + 'M' : (card.value > 0 ? '+' : '') + card.value + '天'}</div>
+            <div class="value ${card.class}">${card.isMoney ? formatNumber(card.value, true) + 'M' : (card.value > 0 ? '+' : '') + card.value + '天'}</div>
         </div>
     `).join('');
 }
@@ -192,16 +213,13 @@ function renderETFTable(data, tbodyId, coin) {
     // 添加 Total 行（使用数据文件中的 summary 数据）
     if (data.summary && data.summary.Total) {
         const totalRow = data.summary.Total;
-        console.log('Total row:', totalRow); // 调试信息
         html += `<tr class="total-row" style="font-weight: bold; background: rgba(255,255,255,0.1);">${totalRow.map((cell, idx) => {
             if (idx === 0) return `<td>Total</td>`;
             const cleanCell = cell.toString().replace(/[(),]/g, '');
             const value = parseFloat(cleanCell) || 0;
             const className = value > 0 ? 'positive' : value < 0 ? 'negative' : '';
-            return `<td class="${className}">${formatNumber(value)}</td>`;
+            return `<td class="${className}">${formatNumber(value, true)}</td>`;
         }).join('')}</tr>`;
-    } else {
-        console.log('No summary data found'); // 调试信息
     }
 
     tbody.innerHTML = html;
