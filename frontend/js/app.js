@@ -192,13 +192,16 @@ function renderETFTable(data, tbodyId, coin) {
     // 添加 Total 行（使用数据文件中的 summary 数据）
     if (data.summary && data.summary.Total) {
         const totalRow = data.summary.Total;
+        console.log('Total row:', totalRow); // 调试信息
         html += `<tr class="total-row" style="font-weight: bold; background: rgba(255,255,255,0.1);">${totalRow.map((cell, idx) => {
-            if (idx === 0) return `<td>${cell}</td>`;
+            if (idx === 0) return `<td>Total</td>`;
             const cleanCell = cell.toString().replace(/[(),]/g, '');
             const value = parseFloat(cleanCell) || 0;
             const className = value > 0 ? 'positive' : value < 0 ? 'negative' : '';
             return `<td class="${className}">${formatNumber(value)}</td>`;
         }).join('')}</tr>`;
+    } else {
+        console.log('No summary data found'); // 调试信息
     }
 
     tbody.innerHTML = html;
