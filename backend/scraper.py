@@ -116,17 +116,18 @@ def get_global_markets():
         'last_updated': datetime.now().isoformat()
     }
     
-    # 如果有缓存，先使用缓存数据
+    # 如果有缓存，先使用缓存数据作为基础
     if cached:
         if 'indices' in cached:
-            result['indices'] = cached['indices']
+            result['indices'] = cached['indices'].copy()
         if 'core' in cached:
-            result['core'] = cached['core']
+            result['core'] = cached['core'].copy()
     
-    # 尝试从 Yahoo 获取最新数据（更新缓存）
+    # 尝试从 Yahoo 获取最新数据（只更新成功的）
     for key, info in INDICES.items():
         data = get_yahoo_price(info['symbol'])
-        if data:
+        # 只更新价格有效的数据（change_pct 不为 0 或者是指数）
+        if data and data['price'] > 0 and (data['change_pct'] != 0 or key in ['SP500', 'DOW', 'NASDAQ']):
             result['indices'][key] = {
                 'name': info['name'],
                 **data
@@ -134,7 +135,8 @@ def get_global_markets():
     
     for key, info in CORE_INDICATORS.items():
         data = get_yahoo_price(info['symbol'])
-        if data:
+        # 只更新价格有效的数据
+        if data and data['price'] > 0 and data['change_pct'] != 0:
             result['core'][key] = {
                 'name': info['name'],
                 **data
