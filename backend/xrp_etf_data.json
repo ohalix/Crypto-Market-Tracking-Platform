@@ -1,6 +1,11 @@
 {
   "daily_data": [
-    {"date": "06 Mar 2026", "canary": 0, "bitwise": -3.65, "franklin": 0, "shares21": -10.6, "grayscale": -2.37, "total": -16.62}
+    {"date": "06 Mar 2026", "canary": 0.0, "bitwise": -3.65, "franklin": 0.0, "shares21": -10.6, "grayscale": -2.37, "total": -16.62},
+    {"date": "05 Mar 2026", "canary": 0.0, "bitwise": 0.0, "franklin": 0.0, "shares21": 0.0, "grayscale": 0.0, "total": 0.0},
+    {"date": "04 Mar 2026", "canary": 0.0, "bitwise": 0.0, "franklin": 0.0, "shares21": 0.0, "grayscale": 0.0, "total": 0.0},
+    {"date": "03 Mar 2026", "canary": 0.0, "bitwise": 0.0, "franklin": 0.0, "shares21": 0.0, "grayscale": 0.0, "total": 0.0},
+    {"date": "28 Feb 2026", "canary": 0.0, "bitwise": 0.0, "franklin": 0.0, "shares21": 0.0, "grayscale": 0.0, "total": 0.0},
+    {"date": "27 Feb 2026", "canary": 0.0, "bitwise": 0.0, "franklin": 0.0, "shares21": 0.0, "grayscale": 0.0, "total": 0.0}
   ],
   "last_updated": "2026-03-09T12:00:00"
 }

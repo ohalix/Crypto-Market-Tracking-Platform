@@ -99,32 +99,71 @@ function renderCrypto(cryptoData) {
     }).join('');
 }
 
+// 计算连续流入/流出天数
+function calculateConsecutiveDays(dailyData) {
+    if (!dailyData || dailyData.length === 0) return 0;
+    
+    // 从最新日期开始倒序检查
+    let consecutiveDays = 0;
+    let lastDirection = 0; // 0=无, 1=流入, -1=流出
+    
+    for (let i = dailyData.length - 1; i >= 0; i--) {
+        const total = dailyData[i].total || 0;
+        const currentDirection = total > 0 ? 1 : (total < 0 ? -1 : 0);
+        
+        if (currentDirection === 0) continue; // 跳过0值
+        
+        if (lastDirection === 0) {
+            // 第一个非零值
+            lastDirection = currentDirection;
+            consecutiveDays = 1;
+        } else if (currentDirection === lastDirection) {
+            // 方向相同，继续计数
+            consecutiveDays++;
+        } else {
+            // 方向改变，停止计数
+            break;
+        }
+    }
+    
+    // 返回带符号的天数（正数=流入，负数=流出）
+    return lastDirection * consecutiveDays;
+}
+
 // 渲染 ETF 汇总
 function renderETFSummary(data, containerId) {
     const container = document.getElementById(containerId);
-    if (!container || !data || !data.daily_data) {
+    if (!container || !data || !data.daily_data || data.daily_data.length === 0) {
         if (container) container.innerHTML = '<div class="summary-card"><h3>暂无数据</h3></div>';
         return;
     }
 
-    const latest = data.daily_data[0];
+    // 取最新数据（数组最后一个）
+    const latest = data.daily_data[data.daily_data.length - 1];
     const totalInflow = data.daily_data.reduce((sum, d) => sum + (d.total || 0), 0);
-    const positiveDays = data.daily_data.filter(d => (d.total || 0) > 0).length;
-    const negativeDays = data.daily_data.filter(d => (d.total || 0) < 0).length;
+    const consecutiveDays = calculateConsecutiveDays(data.daily_data);
 
     const cards = [
-        { title: '最新流入', value: latest.total || 0, class: (latest.total || 0) >= 0 ? 'positive' : 'negative' },
-        { title: '累计流入', value: totalInflow, class: totalInflow >= 0 ? 'positive' : 'negative' },
-        { title: '流入天数', value: positiveDays, class: 'positive' },
-        { title: '流出天数', value: negativeDays, class: 'negative' }
+        { title: '最新流入', value: latest.total || 0, class: (latest.total || 0) >= 0 ? 'positive' : 'negative', isMoney: true },
+        { title: '累计流入', value: totalInflow, class: totalInflow >= 0 ? 'positive' : 'negative', isMoney: true },
+        { title: '连续流入(流出)天数', value: consecutiveDays, class: consecutiveDays >= 0 ? 'positive' : 'negative', isMoney: false }
     ];
 
     container.innerHTML = cards.map(card => `
         <div class="summary-card">
             <h3>${card.title}</h3>
-            <div class="value ${card.class}">${formatNumber(card.value)}M</div>
+            <div class="value ${card.class}">${card.isMoney ? formatNumber(card.value) + 'M' : (card.value > 0 ? '+' : '') + card.value + '天'}</div>
         </div>
     `).join('');
+}
+
+// 计算每列的合计
+function calculateColumnTotals(dailyData, columns) {
+    const totals = {};
+    columns.forEach(col => {
+        totals[col] = dailyData.reduce((sum, row) => sum + (row[col] || 0), 0);
+    });
+    return totals;
 }
 
 // 渲染 ETF 表格
@@ -135,7 +174,27 @@ function renderETFTable(data, tbodyId, coin) {
         return;
     }
 
-    tbody.innerHTML = data.daily_data.map(row => {
+    // 定义每列的字段名
+    let columns, headerCols;
+    if (coin === 'btc') {
+        columns = ['blackrock', 'fidelity', 'bitwise', 'ark', 'invesco', 'franklin', 'valkyrie', 'vaneck', 'wtree', 'grayscale_gb', 'grayscale_btc', 'total'];
+        headerCols = 13;
+    } else if (coin === 'eth') {
+        columns = ['blackrock', 'fidelity', 'bitwise', 'shares21', 'vaneck', 'invesco', 'franklin', 'grayscale_et', 'grayscale_eth', 'total'];
+        headerCols = 11;
+    } else if (coin === 'sol') {
+        columns = ['bitwise', 'vaneck1', 'vaneck2', 'vaneck3', 'franklin', 'grayscale', 'total'];
+        headerCols = 8;
+    } else if (coin === 'xrp') {
+        columns = ['canary', 'bitwise', 'franklin', 'shares21', 'grayscale', 'total'];
+        headerCols = 7;
+    }
+
+    // 计算合计
+    const totals = calculateColumnTotals(data.daily_data, columns);
+
+    // 渲染数据行
+    let html = data.daily_data.map(row => {
         let cells;
         if (coin === 'btc') {
             cells = [row.date, row.blackrock, row.fidelity, row.bitwise, row.ark, row.invesco, 
@@ -157,6 +216,17 @@ function renderETFTable(data, tbodyId, coin) {
             return `<td class="${className}">${formatNumber(value)}</td>`;
         }).join('')}</tr>`;
     }).join('');
+
+    // 添加 Total 行
+    const totalCells = ['Total'].concat(columns.map(col => totals[col]));
+    html += `<tr class="total-row" style="font-weight: bold; background: rgba(255,255,255,0.1);">${totalCells.map((cell, idx) => {
+        if (idx === 0) return `<td>${cell}</td>`;
+        const value = parseFloat(cell) || 0;
+        const className = value > 0 ? 'positive' : value < 0 ? 'negative' : '';
+        return `<td class="${className}">${formatNumber(value)}</td>`;
+    }).join('')}</tr>`;
+
+    tbody.innerHTML = html;
 }
 
 // 更新页面

@@ -334,10 +334,10 @@ def get_all_data():
     return {
         'markets': get_global_markets(),
         'crypto': get_crypto_prices(),
-        'btc_etf': load_data('btc_etf_data'),
-        'eth_etf': load_data('eth_etf_data'),
-        'sol_etf': load_data('sol_etf_data'),
-        'xrp_etf': load_data('xrp_etf_data'),
+        'btc_etf': load_data('btc'),
+        'eth_etf': load_data('eth'),
+        'sol_etf': load_data('sol'),
+        'xrp_etf': load_data('xrp'),
     }
 
 
