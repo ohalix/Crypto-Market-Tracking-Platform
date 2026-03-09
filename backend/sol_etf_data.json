@@ -1,6 +1,22 @@
 {
+  "headers": ["", "Bitwise", "VanEck1", "VanEck2", "VanEck3", "Franklin", "Grayscale", "Total"],
   "daily_data": [
-    {"date": "18 Feb 2026", "blackrock": -29.9, "fidelity": -8.2, "bitwise": 0, "shares21": 0, "vaneck": 0, "invesco": -3.7, "franklin": 0, "grayscale_sol": 0, "total": -41.8}
+    {"date": "18 Feb 2026", "bitwise": 1.5, "vaneck1": 0.0, "vaneck2": 0.5, "vaneck3": 0.0, "franklin": 0.0, "grayscale": 0.0, "total": 2.0},
+    {"date": "19 Feb 2026", "bitwise": 5.5, "vaneck1": 0.0, "vaneck2": 0.5, "vaneck3": 0.0, "franklin": 0.0, "grayscale": 0.0, "total": 6.0},
+    {"date": "20 Feb 2026", "bitwise": 3.0, "vaneck1": 0.0, "vaneck2": 0.0, "vaneck3": 0.0, "franklin": 0.7, "grayscale": 0.0, "total": 3.7},
+    {"date": "23 Feb 2026", "bitwise": 6.3, "vaneck1": 0.0, "vaneck2": 0.9, "vaneck3": 0.0, "franklin": 0.0, "grayscale": 0.8, "total": 8.0},
+    {"date": "24 Feb 2026", "bitwise": 2.6, "vaneck1": 0.0, "vaneck2": 1.2, "vaneck3": 0.0, "franklin": 0.0, "grayscale": 0.0, "total": 3.8},
+    {"date": "25 Feb 2026", "bitwise": 29.0, "vaneck1": 0.9, "vaneck2": 0.0, "vaneck3": 0.0, "franklin": 0.0, "grayscale": 1.0, "total": 30.9},
+    {"date": "26 Feb 2026", "bitwise": 0.0, "vaneck1": 0.0, "vaneck2": 0.5, "vaneck3": 0.0, "franklin": 0.0, "grayscale": 0.0, "total": 0.5},
+    {"date": "27 Feb 2026", "bitwise": 1.3, "vaneck1": 0.0, "vaneck2": 0.0, "vaneck3": 0.0, "franklin": 0.0, "grayscale": 0.0, "total": 1.3},
+    {"date": "02 Mar 2026", "bitwise": 16.0, "vaneck1": 0.0, "vaneck2": 0.8, "vaneck3": 0.0, "franklin": 0.0, "grayscale": 0.0, "total": 16.8},
+    {"date": "03 Mar 2026", "bitwise": 0.0, "vaneck1": 0.0, "vaneck2": 0.0, "vaneck3": 0.0, "franklin": 0.7, "grayscale": 0.0, "total": 0.7},
+    {"date": "04 Mar 2026", "bitwise": 19.1, "vaneck1": 0.0, "vaneck2": 0.0, "vaneck3": 0.0, "franklin": 0.0, "grayscale": 0.0, "total": 19.1},
+    {"date": "05 Mar 2026", "bitwise": 0.0, "vaneck1": 0.0, "vaneck2": -6.0, "vaneck3": 0.0, "franklin": 0.0, "grayscale": 0.0, "total": -6.0},
+    {"date": "06 Mar 2026", "bitwise": -1.1, "vaneck1": 0.0, "vaneck2": -5.0, "vaneck3": 0.0, "franklin": 0.0, "grayscale": -2.5, "total": -8.6}
   ],
+  "summary": {
+    "Total": ["Total", "767.9", "21.0", "152.5", "-102.6", "7.4", "107.8", "954"]
+  },
   "last_updated": "2026-03-09T12:00:00"
 }

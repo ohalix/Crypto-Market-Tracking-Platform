@@ -144,8 +144,8 @@ function renderETFTable(data, tbodyId, coin) {
             cells = [row.date, row.blackrock, row.fidelity, row.bitwise, row.shares21, row.vaneck, 
                      row.invesco, row.franklin, row.grayscale_et, row.grayscale_eth, row.total];
         } else if (coin === 'sol') {
-            cells = [row.date, row.blackrock, row.fidelity, row.bitwise, row.shares21, row.vaneck, 
-                     row.invesco, row.franklin, row.grayscale_sol, row.total];
+            cells = [row.date, row.bitwise, row.vaneck1, row.vaneck2, row.vaneck3, 
+                     row.franklin, row.grayscale, row.total];
         } else if (coin === 'xrp') {
             cells = [row.date, row.canary, row.bitwise, row.franklin, row.shares21, row.grayscale, row.total];
         }
