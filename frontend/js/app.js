@@ -182,9 +182,29 @@ async function updatePage() {
     }
 }
 
+// TAB 切换功能
+function initTabs() {
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // 移除所有 active
+            tabBtns.forEach(b => b.classList.remove('active'));
+            tabContents.forEach(c => c.classList.remove('active'));
+            
+            // 添加 active 到当前
+            btn.classList.add('active');
+            const tabId = btn.getAttribute('data-tab') + '-tab';
+            document.getElementById(tabId).classList.add('active');
+        });
+    });
+}
+
 // 初始化
 async function init() {
     await updatePage();
+    initTabs();
     
     // 每 5 分钟自动刷新
     setInterval(updatePage, 5 * 60 * 1000);

@@ -21,81 +21,85 @@
                 </div>
             </section>
 
-            <!-- BTC ETF 数据 -->
-            <section class="data-card">
-                <div class="card-header">
-                    <h2>Bitcoin ETF Flow</h2>
-                    <div class="update-info">
-                        <span id="btc-last-update">加载中...</span>
-                    </div>
-                </div>
-                
-                <div class="summary-cards" id="btc-summary">
-                    <!-- BTC 汇总卡片 -->
+            <!-- TAB 切换 -->
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" data-tab="btc">Bitcoin ETF</button>
+                    <button class="tab-btn" data-tab="eth">Ethereum ETF</button>
                 </div>
 
-                <div class="table-container">
-                    <table id="btc-table">
-                        <thead>
-                            <tr>
-                                <th>日期</th>
-                                <th>Blackrock</th>
-                                <th>Fidelity</th>
-                                <th>Bitwise</th>
-                                <th>Ark</th>
-                                <th>Invesco</th>
-                                <th>Franklin</th>
-                                <th>Valkyrie</th>
-                                <th>VanEck</th>
-                                <th>WTree</th>
-                                <th>Grayscale GB</th>
-                                <th>Grayscale BTC</th>
-                                <th class="total">Total</th>
-                            </tr>
-                        </thead>
-                        <tbody id="btc-table-body">
-                            <!-- BTC 数据 -->
-                        </tbody>
-                    </table>
-                </div>
-            </section>
+                <!-- BTC 内容 -->
+                <div class="tab-content active" id="btc-tab">
+                    <section class="data-card">
+                        <div class="card-header">
+                            <h2>Bitcoin ETF Flow</h2>
+                            <div class="update-info">
+                                <span id="btc-last-update">加载中...</span>
+                            </div>
+                        </div>
+                        
+                        <div class="summary-cards" id="btc-summary"></div>
 
-            <!-- ETH ETF 数据 -->
-            <section class="data-card">
-                <div class="card-header">
-                    <h2>Ethereum ETF Flow</h2>
-                    <div class="update-info">
-                        <span id="eth-last-update">加载中...</span>
-                    </div>
-                </div>
-                
-                <div class="summary-cards" id="eth-summary">
-                    <!-- ETH 汇总卡片 -->
+                        <div class="table-container">
+                            <table id="btc-table">
+                                <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>Blackrock</th>
+                                        <th>Fidelity</th>
+                                        <th>Bitwise</th>
+                                        <th>Ark</th>
+                                        <th>Invesco</th>
+                                        <th>Franklin</th>
+                                        <th>Valkyrie</th>
+                                        <th>VanEck</th>
+                                        <th>WTree</th>
+                                        <th>Grayscale GB</th>
+                                        <th>Grayscale BTC</th>
+                                        <th class="total">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="btc-table-body"></tbody>
+                            </table>
+                        </div>
+                    </section>
                 </div>
 
-                <div class="table-container">
-                    <table id="eth-table">
-                        <thead>
-                            <tr>
-                                <th>日期</th>
-                                <th>Blackrock</th>
-                                <th>Fidelity</th>
-                                <th>Bitwise</th>
-                                <th>21Shares</th>
-                                <th>VanEck</th>
-                                <th>Invesco</th>
-                                <th>Franklin</th>
-                                <th>Grayscale ET</th>
-                                <th>Grayscale ETH</th>
-                                <th class="total">Total</th>
-                            </tr>
-                        </thead>
-                        <tbody id="eth-table-body">
-                            <!-- ETH 数据 -->
-                        </tbody>
-                    </table>
+                <!-- ETH 内容 -->
+                <div class="tab-content" id="eth-tab">
+                    <section class="data-card">
+                        <div class="card-header">
+                            <h2>Ethereum ETF Flow</h2>
+                            <div class="update-info">
+                                <span id="eth-last-update">加载中...</span>
+                            </div>
+                        </div>
+                        
+                        <div class="summary-cards" id="eth-summary"></div>
+
+                        <div class="table-container">
+                            <table id="eth-table">
+                                <thead>
+                                    <tr>
+                                        <th>日期</th>
+                                        <th>Blackrock</th>
+                                        <th>Fidelity</th>
+                                        <th>Bitwise</th>
+                                        <th>21Shares</th>
+                                        <th>VanEck</th>
+                                        <th>Invesco</th>
+                                        <th>Franklin</th>
+                                        <th>Grayscale ET</th>
+                                        <th>Grayscale ETH</th>
+                                        <th class="total">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="eth-table-body"></tbody>
+                            </table>
+                        </div>
+                    </section>
                 </div>
-            </section>
+            </div>
         </main>
 
         <footer>
