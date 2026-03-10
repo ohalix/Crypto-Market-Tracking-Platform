@@ -106,144 +106,75 @@ def get_yahoo_price(symbol):
 
 
 def get_global_markets():
-    """获取全球市场行情 - 强制更新，失败时使用缓存"""
+    """获取全球市场行情 - 优先使用缓存数据确保显示正常"""
+    # 先加载缓存数据
+    cached = load_data('markets_cache')
+    
     result = {
         'indices': {},
         'core': {},
         'last_updated': datetime.now().isoformat()
     }
     
-    # 先尝试获取最新数据
-    updated_count = 0
+    # 如果有缓存，先使用缓存数据作为基础
+    if cached:
+        if 'indices' in cached:
+            result['indices'] = cached['indices'].copy()
+        if 'core' in cached:
+            result['core'] = cached['core'].copy()
     
+    # 尝试从 Yahoo 获取最新数据（只更新成功的）
     for key, info in INDICES.items():
         data = get_yahoo_price(info['symbol'])
-        if data and data['price'] > 0:
+        # 只更新价格有效的数据（change_pct 不为 0 或者是指数）
+        if data and data['price'] > 0 and (data['change_pct'] != 0 or key in ['SP500', 'DOW', 'NASDAQ']):
             result['indices'][key] = {
                 'name': info['name'],
                 **data
             }
-            updated_count += 1
-        else:
-            # 如果获取失败，尝试从缓存获取
-            cached = load_data('markets_cache')
-            if cached and 'indices' in cached and key in cached['indices']:
-                result['indices'][key] = cached['indices'][key]
-                print(f"使用缓存数据: {info['name']}")
     
     for key, info in CORE_INDICATORS.items():
         data = get_yahoo_price(info['symbol'])
-        if data and data['price'] > 0:
+        # 只更新价格有效的数据
+        if data and data['price'] > 0 and data['change_pct'] != 0:
             result['core'][key] = {
                 'name': info['name'],
                 **data
             }
-            updated_count += 1
-        else:
-            # 如果获取失败，尝试从缓存获取
-            cached = load_data('markets_cache')
-            if cached and 'core' in cached and key in cached['core']:
-                result['core'][key] = cached['core'][key]
-                print(f"使用缓存数据: {info['name']}")
     
-    # 如果成功获取到任何数据，更新缓存
-    if updated_count > 0:
+    # 保存到缓存
+    if result['indices'] or result['core']:
+        import json
         filepath = os.path.join(DATA_DIR, 'markets_cache.json')
         with open(filepath, 'w', encoding='utf-8') as f:
             json.dump(result, f, ensure_ascii=False, indent=2)
-        print(f"市场数据更新成功: {updated_count} 项")
-    else:
-        # 完全失败时，加载缓存
-        cached = load_data('markets_cache')
-        if cached:
-            result = cached
-            result['last_updated'] = datetime.now().isoformat()
-            print("完全使用缓存数据")
     
     return result
 
 
 def get_crypto_prices():
-    """获取加密货币价格（多数据源，优先 Binance，失败时用缓存）"""
-    prices = {}
-    
+    """获取加密货币价格（CoinGecko）"""
     try:
-        # 尝试 Binance API（更稳定）
-        symbols = ['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'XRPUSDT']
+        url = 'https://api.coingecko.com/api/v3/simple/price'
+        params = {
+            'ids': 'bitcoin,ethereum,solana,ripple',
+            'vs_currencies': 'usd',
+            'include_24hr_change': 'true'
+        }
         
-        for symbol in symbols:
-            try:
-                url = f'https://api.binance.com/api/v3/ticker/24hr?symbol={symbol}'
-                response = requests.get(url, timeout=5)
-                data = response.json()
-                
-                coin_key = symbol.replace('USDT', '')
-                # Binance API 返回字段可能是 lastPrice 或 lastPrcie（注意拼写）
-                last_price = data.get('lastPrice') or data.get('lastPrcie') or '0'
-                price_change = data.get('priceChange') or '0'
-                price_change_percent = data.get('priceChangePercent') or '0'
-                
-                prices[coin_key] = {
-                    'price': float(last_price),
-                    'change': float(price_change),
-                    'change_pct': float(price_change_percent)
-                }
-            except Exception as e:
-                print(f"Binance {symbol} 失败: {e}")
+        response = requests.get(url, params=params, timeout=10)
+        data = response.json()
         
-        # 如果 Binance 失败，尝试 CoinGecko 作为备选
-        if not prices:
-            url = 'https://api.coingecko.com/api/v3/simple/price'
-            params = {
-                'ids': 'bitcoin,ethereum,solana,ripple',
-                'vs_currencies': 'usd',
-                'include_24hr_change': 'true'
-            }
-            
-            response = requests.get(url, params=params, timeout=10)
-            data = response.json()
-            
-            prices = {
-                'BTC': {'price': data['bitcoin']['usd'], 'change_pct': data['bitcoin'].get('usd_24h_change', 0)},
-                'ETH': {'price': data['ethereum']['usd'], 'change_pct': data['ethereum'].get('usd_24h_change', 0)},
-                'SOL': {'price': data['solana']['usd'], 'change_pct': data['solana'].get('usd_24h_change', 0)},
-                'XRP': {'price': data['ripple']['usd'], 'change_pct': data['ripple'].get('usd_24h_change', 0)},
-            }
-        
-        # 保存成功获取的数据到缓存
-        if prices:
-            result = {}
-            for coin in ['BTC', 'ETH', 'SOL', 'XRP']:
-                if coin in prices:
-                    result[coin] = prices[coin]
-            result['last_updated'] = datetime.now().isoformat()
-            
-            # 保存到缓存文件
-            filepath = os.path.join(DATA_DIR, 'crypto_cache.json')
-            with open(filepath, 'w', encoding='utf-8') as f:
-                json.dump(result, f, ensure_ascii=False, indent=2)
-            print(f"加密货币数据已缓存: {list(prices.keys())}")
-            return result
-        
+        return {
+            'BTC': {'price': data['bitcoin']['usd'], 'change_pct': data['bitcoin'].get('usd_24h_change', 0)},
+            'ETH': {'price': data['ethereum']['usd'], 'change_pct': data['ethereum'].get('usd_24h_change', 0)},
+            'SOL': {'price': data['solana']['usd'], 'change_pct': data['solana'].get('usd_24h_change', 0)},
+            'XRP': {'price': data['ripple']['usd'], 'change_pct': data['ripple'].get('usd_24h_change', 0)},
+            'last_updated': datetime.now().isoformat()
+        }
     except Exception as e:
         print(f"获取加密货币价格失败: {e}")
-    
-    # 如果 API 都失败了，读取缓存
-    cached = load_data('crypto_cache')
-    if cached:
-        print("使用缓存的加密货币数据")
-        cached['last_updated'] = datetime.now().isoformat()
-        return cached
-    
-    # 连缓存都没有，返回默认值
-    print("警告: 无法获取加密货币数据，使用默认值")
-    return {
-        'BTC': {'price': 0, 'change': 0, 'change_pct': 0},
-        'ETH': {'price': 0, 'change': 0, 'change_pct': 0},
-        'SOL': {'price': 0, 'change': 0, 'change_pct': 0},
-        'XRP': {'price': 0, 'change': 0, 'change_pct': 0},
-        'last_updated': datetime.now().isoformat()
-    }
+        return None
 
 
 def scrape_farside_etf(coin='btc'):

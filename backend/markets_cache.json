@@ -1,22 +1,97 @@
 {
   "indices": {
-    "SP500": {"name": "标普500", "price": 6740.0, "change": -90.5, "change_pct": -1.33},
-    "DOW": {"name": "道指", "price": 47501.0, "change": -450.2, "change_pct": -0.94},
-    "NASDAQ": {"name": "纳指", "price": 22387.0, "change": -361.5, "change_pct": -1.59},
-    "NIKKEI": {"name": "日经225", "price": 52728.0, "change": -2895.0, "change_pct": -5.20},
-    "KOSPI": {"name": "韩国KOSPI", "price": 5251.0, "change": -313.0, "change_pct": -5.96},
-    "HANGSENG": {"name": "恒生", "price": 25408.0, "change": -347.0, "change_pct": -1.35},
-    "SHANGHAI": {"name": "上证", "price": 4096.0, "change": -27.5, "change_pct": -0.67},
-    "DAX": {"name": "德国DAX", "price": 23200.0, "change": -389.0, "change_pct": -1.65},
-    "FTSE": {"name": "英国FTSE", "price": 10155.0, "change": -128.0, "change_pct": -1.25},
-    "CAC": {"name": "法国CAC", "price": 7844.0, "change": -149.0, "change_pct": -1.86}
+    "SP500": {
+      "name": "标普500",
+      "price": 6795.99,
+      "change": 55.96998046874978,
+      "change_pct": 0.8304126739469586
+    },
+    "DOW": {
+      "name": "道指",
+      "price": 47740.8,
+      "change": 239.2492187500029,
+      "change_pct": 0.5036661220846717
+    },
+    "NASDAQ": {
+      "name": "纳指",
+      "price": 22695.945,
+      "change": 308.2653124999997,
+      "change_pct": 1.3769417679855294
+    },
+    "NIKKEI": {
+      "name": "日经225",
+      "price": 54248.39,
+      "change": 1519.6712499999994,
+      "change_pct": 2.882056090164337
+    },
+    "KOSPI": {
+      "name": "韩国KOSPI",
+      "price": 5532.59,
+      "change": 280.71988281250015,
+      "change_pct": 5.345141379140432
+    },
+    "HANGSENG": {
+      "name": "恒生",
+      "price": 25907.55,
+      "change": 499.0890624999993,
+      "change_pct": 1.9642632575332437
+    },
+    "SHANGHAI": {
+      "name": "上证",
+      "price": 4123.138,
+      "change": 26.53497265624992,
+      "change_pct": 0.647731119640735
+    },
+    "DAX": {
+      "name": "德国DAX",
+      "price": 23409.37,
+      "change": -181.65929687500102,
+      "change_pct": -0.7700354850522128
+    },
+    "FTSE": {
+      "name": "英国FTSE",
+      "price": 10249.52,
+      "change": -35.27980468749956,
+      "change_pct": -0.3430285990731691
+    },
+    "CAC": {
+      "name": "法国CAC",
+      "price": 7915.36,
+      "change": -78.13023437500033,
+      "change_pct": -0.9774232792455425
+    }
   },
   "core": {
-    "DXY": {"name": "美元指数", "price": 99.30, "change": 0.37, "change_pct": 0.37},
-    "VIX": {"name": "VIX恐慌", "price": 32.20, "change": 2.70, "change_pct": 9.19},
-    "CRUDE": {"name": "原油", "price": 103.51, "change": 10.90, "change_pct": 11.99},
-    "GOLD": {"name": "黄金", "price": 5095.90, "change": -40.5, "change_pct": -0.79},
-    "US10Y": {"name": "美债10年", "price": 4.13, "change": -0.013, "change_pct": -0.31}
+    "DXY": {
+      "name": "美元指数",
+      "price": 98.618,
+      "change": -0.5620003051757863,
+      "change_pct": -0.5666468072660994
+    },
+    "VIX": {
+      "name": "VIX恐慌",
+      "price": 23.71,
+      "change": -1.7899999999999991,
+      "change_pct": -7.019607843137251
+    },
+    "CRUDE": {
+      "name": "原油",
+      "price": 87.44,
+      "change": 0,
+      "change_pct": 0
+    },
+    "GOLD": {
+      "name": "黄金",
+      "price": 5178.6,
+      "change": 0,
+      "change_pct": 0
+    },
+    "US10Y": {
+      "name": "美债10年",
+      "price": 4.136,
+      "change": 0.0030001029968262927,
+      "change_pct": 0.07258899277983671
+    }
   },
-  "last_updated": "2026-03-09T12:00:00"
+  "last_updated": "2026-03-10T15:47:00.532742"
 }
