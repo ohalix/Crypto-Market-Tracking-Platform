@@ -1,25 +1,23 @@
 {
-  "headers": ["", "", "", "", "", "", "", "", "", "", "Total"],
-  "daily_data": [
-    {"date": "18 Feb 2026", "blackrock": -29.9, "fidelity": -8.2, "bitwise": 0, "shares21": 0, "vaneck": 0, "invesco": -3.7, "franklin": 0, "grayscale_et": 0, "grayscale_eth": 0, "total": -41.8},
-    {"date": "19 Feb 2026", "blackrock": -96.8, "fidelity": -11.6, "bitwise": -3.3, "shares21": 0, "vaneck": 0, "invesco": 0, "franklin": 0, "grayscale_et": 0, "grayscale_eth": -18.4, "total": -130.1},
-    {"date": "20 Feb 2026", "blackrock": 1.8, "fidelity": -2.5, "bitwise": 0, "shares21": 0.7, "vaneck": 0, "invesco": 0, "franklin": 0, "grayscale_et": 0, "grayscale_eth": 0, "total": 0},
-    {"date": "23 Feb 2026", "blackrock": -45.4, "fidelity": -1.4, "bitwise": 0, "shares21": 0, "vaneck": -2.7, "invesco": 0, "franklin": 0, "grayscale_et": 0, "grayscale_eth": 0, "total": -49.5},
-    {"date": "24 Feb 2026", "blackrock": 0, "fidelity": -1.9, "bitwise": 0, "shares21": 0, "vaneck": 0, "invesco": 0, "franklin": 0, "grayscale_et": 0, "grayscale_eth": 11.1, "total": 9.2},
-    {"date": "25 Feb 2026", "blackrock": 31.3, "fidelity": 61.9, "bitwise": 1.5, "shares21": 0, "vaneck": 3.0, "invesco": 0, "franklin": 0, "grayscale_et": 33.9, "grayscale_eth": 25.6, "total": 157.2},
-    {"date": "26 Feb 2026", "blackrock": 15.3, "fidelity": -19.2, "bitwise": 0, "shares21": 7.6, "vaneck": 0, "invesco": -2.2, "franklin": 0, "grayscale_et": 6.6, "grayscale_eth": -1.5, "total": 6.6},
-    {"date": "27 Feb 2026", "blackrock": -43.0, "fidelity": 0, "bitwise": 0, "shares21": 0, "vaneck": 0, "invesco": 0, "franklin": 0, "grayscale_et": 0, "grayscale_eth": 0, "total": -43.0},
-    {"date": "02 Mar 2026", "blackrock": 26.5, "fidelity": 1.0, "bitwise": 2.2, "shares21": 0, "vaneck": 0, "invesco": 0, "franklin": 0, "grayscale_et": 4.2, "grayscale_eth": 4.8, "total": 38.7},
-    {"date": "03 Mar 2026", "blackrock": 41.9, "fidelity": -66.7, "bitwise": 0, "shares21": 0, "vaneck": 0, "invesco": 0, "franklin": 0, "grayscale_et": -4.7, "grayscale_eth": 18.7, "total": -10.8},
-    {"date": "04 Mar 2026", "blackrock": 39.3, "fidelity": 30.3, "bitwise": 8.9, "shares21": 0, "vaneck": 9.5, "invesco": 0, "franklin": 0, "grayscale_et": 21.9, "grayscale_eth": 59.5, "total": 169.4},
-    {"date": "05 Mar 2026", "blackrock": 30.3, "fidelity": -115.0, "bitwise": -3.6, "shares21": -5.2, "vaneck": -3.8, "invesco": 2.7, "franklin": 0, "grayscale_et": -3.4, "grayscale_eth": 7.1, "total": -90.9},
-    {"date": "06 Mar 2026", "blackrock": -4.8, "fidelity": -67.6, "bitwise": 0, "shares21": 0, "vaneck": -2.9, "invesco": 0, "franklin": 0, "grayscale_et": -1.6, "grayscale_eth": -6.0, "total": -82.9}
+  "headers": [
+    "Date",
+    "Price",
+    "Change",
+    "Change %"
   ],
-  "summary": {
-    "Total": ["Total", "11,967", "2,301", "396", "30", "178", "26", "65", "(5,131)", "1,825", "11,658"],
-    "Average": ["Average", "29.4", "5.7", "1.0", "0.1", "0.4", "0.1", "0.2", "(12.6)", "4.5", "28.6"],
-    "Maximum": ["Maximum", "639.8", "276.9", "204.0", "8.0", "19.8", "6.7", "13.2", "53.7", "99.8", "1,018.8"],
-    "Minimum": ["Minimum", "(375.0)", "(272.2)", "(56.1)", "(14.7)", "(18.7)", "(8.4)", "(6.6)", "(484.1)", "(88.5)", "(465.1)"]
-  },
-  "last_updated": "2026-03-09T12:30:00"
+  "daily_data": [
+    {
+      "date": "2026-03-11",
+      "ETHA": 15.47,
+      "FETH": 20.42,
+      "average": 17.95
+    },
+    {
+      "date": "2026-03-10",
+      "CETH": 10.18,
+      "average": 10.18
+    }
+  ],
+  "summary": {},
+  "last_updated": "2026-03-11T21:51:11.853889"
 }

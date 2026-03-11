@@ -1,25 +1,22 @@
 {
-  "headers": ["", "", "", "", "", "", "", "", "", "", "", "", "Total"],
-  "daily_data": [
-    {"date": "18 Feb 2026", "blackrock": -84.2, "fidelity": -49.1, "bitwise": 0, "ark": 0, "invesco": 0, "franklin": 0, "valkyrie": 0, "vaneck": 0, "wtree": 0, "grayscale_gb": 0, "grayscale_btc": 0, "total": -133.3},
-    {"date": "19 Feb 2026", "blackrock": -164.1, "fidelity": 0, "bitwise": 0, "ark": 0, "invesco": 0, "franklin": 0, "valkyrie": -1.7, "vaneck": 0, "wtree": 0, "grayscale_gb": 0, "grayscale_btc": 0, "total": -165.8},
-    {"date": "20 Feb 2026", "blackrock": 64.5, "fidelity": 23.6, "bitwise": 0, "ark": 0, "invesco": 0, "franklin": 0, "valkyrie": 0, "vaneck": 0, "wtree": 0, "grayscale_gb": 0, "grayscale_btc": 0, "total": 88.1},
-    {"date": "23 Feb 2026", "blackrock": -116.4, "fidelity": -27.9, "bitwise": -43.6, "ark": -9.2, "invesco": 0, "franklin": 0, "valkyrie": 0, "vaneck": 6.4, "wtree": 0, "grayscale_gb": -13.1, "grayscale_btc": 0, "total": -203.8},
-    {"date": "24 Feb 2026", "blackrock": 78.9, "fidelity": 82.8, "bitwise": 3.5, "ark": 71.1, "invesco": 0, "franklin": 0, "valkyrie": 0, "vaneck": 12.8, "wtree": 0, "grayscale_gb": 0, "grayscale_btc": 8.6, "total": 257.7},
-    {"date": "25 Feb 2026", "blackrock": 297.4, "fidelity": 30.1, "bitwise": 39.4, "ark": 2.3, "invesco": 0, "franklin": 0, "valkyrie": 0, "vaneck": 15.6, "wtree": 0, "grayscale_gb": 102.5, "grayscale_btc": 19.3, "total": 506.6},
-    {"date": "26 Feb 2026", "blackrock": 275.8, "fidelity": -51.5, "bitwise": 69, "ark": -44.9, "invesco": 0, "franklin": 0, "valkyrie": 0, "vaneck": 0, "wtree": 0, "grayscale_gb": 0, "grayscale_btc": 6, "total": 254.4},
-    {"date": "27 Feb 2026", "blackrock": -32.7, "fidelity": 0, "bitwise": 0, "ark": 0, "invesco": 3.3, "franklin": 1.9, "valkyrie": 0, "vaneck": 0, "wtree": 0, "grayscale_gb": 0, "grayscale_btc": 0, "total": -27.5},
-    {"date": "02 Mar 2026", "blackrock": 263.2, "fidelity": 94.8, "bitwise": 36.4, "ark": 5.7, "invesco": 6.2, "franklin": 14, "valkyrie": 0, "vaneck": 19.5, "wtree": 0, "grayscale_gb": 0, "grayscale_btc": 18.4, "total": 458.2},
-    {"date": "03 Mar 2026", "blackrock": 322.4, "fidelity": -89.3, "bitwise": 0, "ark": 0, "invesco": 0, "franklin": 0, "valkyrie": 11.6, "vaneck": 0, "wtree": 8.7, "grayscale_gb": -28.2, "grayscale_btc": 0, "total": 225.2},
-    {"date": "04 Mar 2026", "blackrock": 306.6, "fidelity": 48, "bitwise": 8, "ark": 14.6, "invesco": 9.1, "franklin": 8.5, "valkyrie": 0, "vaneck": 5.2, "wtree": 7.8, "grayscale_gb": 21.7, "grayscale_btc": 32.4, "total": 461.9},
-    {"date": "05 Mar 2026", "blackrock": -88.7, "fidelity": -48, "bitwise": -46.4, "ark": -22.7, "invesco": 0, "franklin": 0, "valkyrie": 5.4, "vaneck": -8.6, "wtree": 0, "grayscale_gb": -18.9, "grayscale_btc": 0, "total": -227.9},
-    {"date": "06 Mar 2026", "blackrock": -143.5, "fidelity": -158.5, "bitwise": -22.2, "ark": -4.5, "invesco": 0, "franklin": 0, "valkyrie": 0, "vaneck": -5.8, "wtree": 0, "grayscale_gb": -9.6, "grayscale_btc": -4.8, "total": -348.9}
+  "headers": [
+    "Date",
+    "Price",
+    "Change",
+    "Change %"
   ],
-  "summary": {
-    "Total": ["Total", "62,465", "10,852", "2,146", "1,464", "245", "367", "324", "1,168", "86", "(25,909)", "2,143", "55,351"],
-    "Average": ["Average", "115.9", "20.1", "4.0", "2.7", "0.5", "0.7", "0.6", "2.2", "0.2", "(48.1)", "4.0", "102.7"],
-    "Maximum": ["Maximum", "1,119.9", "473.4", "237.9", "268.7", "63.4", "60.9", "43.4", "118.8", "118.5", "102.5", "191.1", "1,373.8"],
-    "Minimum": ["Minimum", "(528.3)", "(356.6)", "(280.7)", "(327.9)", "(62.0)", "(74.1)", "(74.8)", "(38.4)", "(53.8)", "(642.5)", "(318.2)", "(1,113.7)"]
-  },
-  "last_updated": "2026-03-09T12:30:00"
+  "daily_data": [
+    {
+      "date": "2026-03-11",
+      "IBIT": 39.83,
+      "FBTC": 61.17,
+      "ARKB": 23.31,
+      "BITB": 38.15,
+      "BRRR": 19.83,
+      "BTCW": 74.14,
+      "average": 42.74
+    }
+  ],
+  "summary": {},
+  "last_updated": "2026-03-11T21:51:07.252660"
 }

@@ -164,51 +164,47 @@ def get_global_markets():
 
 
 def get_crypto_prices():
-    """获取加密货币价格（多数据源，优先 Binance，失败时用缓存）"""
+    """获取加密货币价格（优先 CoinGecko，失败时用 Yahoo Finance 备选）"""
     prices = {}
     
     try:
-        # 尝试 Binance API（更稳定）
-        symbols = ['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'XRPUSDT']
+        # 优先使用 CoinGecko API（更稳定）
+        url = 'https://api.coingecko.com/api/v3/simple/price'
+        params = {
+            'ids': 'bitcoin,ethereum,solana,ripple',
+            'vs_currencies': 'usd',
+            'include_24hr_change': 'true'
+        }
         
-        for symbol in symbols:
-            try:
-                url = f'https://api.binance.com/api/v3/ticker/24hr?symbol={symbol}'
-                response = requests.get(url, timeout=5)
-                data = response.json()
-                
-                coin_key = symbol.replace('USDT', '')
-                # Binance API 返回字段可能是 lastPrice 或 lastPrcie（注意拼写）
-                last_price = data.get('lastPrice') or data.get('lastPrcie') or '0'
-                price_change = data.get('priceChange') or '0'
-                price_change_percent = data.get('priceChangePercent') or '0'
-                
-                prices[coin_key] = {
-                    'price': float(last_price),
-                    'change': float(price_change),
-                    'change_pct': float(price_change_percent)
-                }
-            except Exception as e:
-                print(f"Binance {symbol} 失败: {e}")
+        response = requests.get(url, params=params, timeout=10)
+        data = response.json()
         
-        # 如果 Binance 失败，尝试 CoinGecko 作为备选
+        # 计算 change 从 24h change
+        # CoinGecko 返回 id 如 bitcoin, ethereum, solana, ripple
+        coin_mapping = {
+            'bitcoin': 'BTC',
+            'ethereum': 'ETH',
+            'solana': 'SOL',
+            'ripple': 'XRP'
+        }
+        
+        for coin, usd_data in data.items():
+            coin_key = coin_mapping.get(coin, coin.upper())
+            price = usd_data.get('usd', 0)
+            change_pct = usd_data.get('usd_24h_change', 0)
+            change = price * (change_pct / 100) if price and change_pct else 0
+            
+            prices[coin_key] = {
+                'price': price,
+                'change': change,
+                'change_pct': change_pct
+            }
+        
+        print(f"CoinGecko 获取成功: {list(prices.keys())}")
+        
+        # 如果 CoinGecko 失败，尝试 Yahoo Finance 作为备选
         if not prices:
-            url = 'https://api.coingecko.com/api/v3/simple/price'
-            params = {
-                'ids': 'bitcoin,ethereum,solana,ripple',
-                'vs_currencies': 'usd',
-                'include_24hr_change': 'true'
-            }
-            
-            response = requests.get(url, params=params, timeout=10)
-            data = response.json()
-            
-            prices = {
-                'BTC': {'price': data['bitcoin']['usd'], 'change_pct': data['bitcoin'].get('usd_24h_change', 0)},
-                'ETH': {'price': data['ethereum']['usd'], 'change_pct': data['ethereum'].get('usd_24h_change', 0)},
-                'SOL': {'price': data['solana']['usd'], 'change_pct': data['solana'].get('usd_24h_change', 0)},
-                'XRP': {'price': data['ripple']['usd'], 'change_pct': data['ripple'].get('usd_24h_change', 0)},
-            }
+            raise Exception("CoinGecko 无数据")
         
         # 保存成功获取的数据到缓存
         if prices:
@@ -246,97 +242,128 @@ def get_crypto_prices():
     }
 
 
-def scrape_farside_etf(coin='btc'):
-    """从 Farside 抓取 ETF 数据"""
-    url = f'https://farside.co.uk/{coin}/'
-    headers = {'User-Agent': 'Mozilla/5.0'}
+def scrape_yahoo_etf(coin='btc'):
+    """从 Yahoo Finance 抓取 ETF 数据"""
+    # BTC ETF 代码
+    btc_etfs = {
+        'IBIT': 'iShares Bitcoin Trust',
+        'FBTC': 'Fidelity Wise Origin Bitcoin Fund',
+        'ARKB': 'ARK 21Shares Bitcoin ETF',
+        'BITB': 'Bitwise Bitcoin ETF',
+        'BRRR': 'Valkyrie Bitcoin Fund',
+        'BTCW': 'WisdomTree Bitcoin Fund',
+    }
+    
+    # ETH ETF 代码
+    eth_etfs = {
+        'ETHA': 'iShares Ethereum Trust',
+        'FETH': 'Fidelity Ethereum Fund',
+        'CETH': 'Bitwise Ethereum ETF',
+        'ARKE': 'ARK 21Shares Ethereum ETF',
+        'ETHER': 'Valkyrie Ethereum Fund',
+    }
+    
+    # SOL ETF 代码
+    sol_etfs = {
+        'IBTL': 'iShares Solana Trust',
+        'FSOL': 'Fidelity Solana Fund',
+    }
+    
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+    }
+    
+    result = {
+        'headers': ['Date', 'Price', 'Change', 'Change %'],
+        'daily_data': [],
+        'summary': {}
+    }
+    
+    etf_map = {
+        'btc': btc_etfs,
+        'eth': eth_etfs,
+        'sol': sol_etfs
+    }
+    
+    symbols = list(etf_map.get(coin, btc_etfs).keys())
     
     try:
-        response = requests.get(url, headers=headers, timeout=30)
-        soup = BeautifulSoup(response.text, 'lxml')
-        tables = soup.find_all('table')
-        
-        if len(tables) < 2:
-            return None
-        
-        target_table = tables[1]
-        result = {'headers': [], 'daily_data': [], 'summary': {}}
-        
-        # 解析表头
-        header_row = target_table.find('thead')
-        if header_row:
-            headers = header_row.find_all('th')
-            result['headers'] = [h.get_text(strip=True) for h in headers]
-        
-        # 解析数据
-        tbody = target_table.find('tbody')
-        if tbody:
-            rows = tbody.find_all('tr')
-            
-            for row in rows:
-                cells = row.find_all('td')
-                if len(cells) > 0:
-                    row_data = [c.get_text(strip=True) for c in cells]
-                    date_str = row_data[0]
+        # 获取每个 ETF 的价格数据
+        all_data = {}
+        for symbol in symbols:
+            try:
+                url = f"https://query1.finance.yahoo.com/v8/finance/chart/{symbol}"
+                params = {
+                    'interval': '1d',
+                    'range': '5d',
+                    'includeAdjustedClose': 'true'
+                }
+                response = requests.get(url, params=params, headers=headers, timeout=10)
+                data = response.json()
+                
+                if 'chart' in data and data['chart']['result']:
+                    result_data = data['chart']['result'][0]
+                    meta = result_data['meta']
+                    quotes = result_data['indicators']['quote'][0]
                     
-                    if date_str in ['Total', 'Average', 'Maximum', 'Minimum']:
-                        result['summary'][date_str] = row_data
-                    else:
-                        try:
-                            data_row = {'date': date_str}
+                    timestamps = result_data.get('timestamp', [])
+                    closes = quotes.get('close', [])
+                    
+                    if timestamps and closes:
+                        latest_idx = len(closes) - 1
+                        while latest_idx >= 0 and closes[latest_idx] is None:
+                            latest_idx -= 1
+                        
+                        if latest_idx >= 0:
+                            price = closes[latest_idx]
+                            prev_price = closes[latest_idx - 1] if latest_idx > 0 and closes[latest_idx - 1] else price
                             
-                            if coin == 'btc':
-                                data_row.update({
-                                    'blackrock': parse_value(row_data[1]),
-                                    'fidelity': parse_value(row_data[2]),
-                                    'bitwise': parse_value(row_data[3]),
-                                    'ark': parse_value(row_data[4]),
-                                    'invesco': parse_value(row_data[5]),
-                                    'franklin': parse_value(row_data[6]),
-                                    'valkyrie': parse_value(row_data[7]),
-                                    'vaneck': parse_value(row_data[8]),
-                                    'wtree': parse_value(row_data[9]),
-                                    'grayscale_gb': parse_value(row_data[10]),
-                                    'grayscale_btc': parse_value(row_data[11]),
-                                    'total': parse_value(row_data[12])
-                                })
-                            elif coin == 'eth':
-                                data_row.update({
-                                    'blackrock': parse_value(row_data[1]),
-                                    'fidelity': parse_value(row_data[2]),
-                                    'bitwise': parse_value(row_data[3]),
-                                    'shares21': parse_value(row_data[4]),
-                                    'vaneck': parse_value(row_data[5]),
-                                    'invesco': parse_value(row_data[6]),
-                                    'franklin': parse_value(row_data[7]),
-                                    'grayscale_et': parse_value(row_data[8]),
-                                    'grayscale_eth': parse_value(row_data[9]),
-                                    'total': parse_value(row_data[10])
-                                })
-                            elif coin == 'sol':
-                                # SOL 数据结构类似 ETH
-                                data_row.update({
-                                    'blackrock': parse_value(row_data[1]),
-                                    'fidelity': parse_value(row_data[2]),
-                                    'bitwise': parse_value(row_data[3]),
-                                    'shares21': parse_value(row_data[4]),
-                                    'vaneck': parse_value(row_data[5]),
-                                    'invesco': parse_value(row_data[6]),
-                                    'franklin': parse_value(row_data[7]),
-                                    'grayscale_sol': parse_value(row_data[8]),
-                                    'total': parse_value(row_data[9])
-                                })
+                            change = price - prev_price
+                            change_pct = (change / prev_price * 100) if prev_price else 0
                             
-                            result['daily_data'].append(data_row)
-                        except (IndexError, ValueError):
-                            continue
+                            date = datetime.fromtimestamp(timestamps[latest_idx]).strftime('%Y-%m-%d')
+                            
+                            all_data[symbol] = {
+                                'price': price,
+                                'change': change,
+                                'change_pct': change_pct,
+                                'date': date
+                            }
+            except Exception as e:
+                print(f"获取 {symbol} 失败: {e}")
+        
+        # 整理数据
+        if all_data:
+            # 按日期分组
+            dates = sorted(set(d['date'] for d in all_data.values()), reverse=True)
+            
+            for date in dates[:5]:  # 最近5天
+                row = {'date': date}
+                total_price = 0
+                count = 0
+                for symbol, data in all_data.items():
+                    if data['date'] == date:
+                        row[symbol] = round(data['price'], 2)
+                        total_price += data['price']
+                        count += 1
+                
+                if count > 0:
+                    row['average'] = round(total_price / count, 2)
+                    result['daily_data'].append(row)
         
         result['last_updated'] = datetime.now().isoformat()
+        print(f"Yahoo Finance ETF 数据获取成功: {coin}")
         return result
         
     except Exception as e:
         print(f"抓取 {coin} ETF 失败: {e}")
         return None
+
+
+def scrape_farside_etf(coin='btc'):
+    """从 Farside 抓取 ETF 数据（已弃用，改用 Yahoo Finance）"""
+    # Farside 已被 403 封禁，改用 Yahoo Finance
+    return scrape_yahoo_etf(coin)
 
 
 def scrape_sosovalue_xrp():
@@ -373,10 +400,8 @@ def scrape_sosovalue_xrp():
 
 def auto_update_etf(coin='btc'):
     """自动更新 ETF 数据"""
-    if coin in ['btc', 'eth', 'sol']:
-        new_data = scrape_farside_etf(coin)
-    elif coin == 'xrp':
-        new_data = scrape_sosovalue_xrp()
+    if coin in ['btc', 'eth', 'sol', 'xrp']:
+        new_data = scrape_yahoo_etf(coin)
     else:
         return False, f"不支持 {coin}"
     
@@ -384,7 +409,7 @@ def auto_update_etf(coin='btc'):
         filepath = os.path.join(DATA_DIR, f'{coin}_etf_data.json')
         with open(filepath, 'w', encoding='utf-8') as f:
             json.dump(new_data, f, ensure_ascii=False, indent=2)
-        return True, f"{coin.upper()}: 更新成功"
+        return True, f"{coin.upper()}: 更新成功 ({len(new_data['daily_data'])} 条数据)"
     
     return False, f"{coin.upper()}: 抓取失败"
 
