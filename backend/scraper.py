@@ -115,8 +115,8 @@ def format_date(date_str):
     
     date_str = date_str.strip()
     
-    # 过滤掉非日期行（如 Fee、Staking、Seed、Total、Average 等）
-    non_date_keywords = ['fee', 'staking', 'seed', 'total', 'average', 'issuer', 'name', 'aum']
+    # 过滤掉非日期行（如 Fee、Staking、Seed、Total、Average、Maximum、Minimum 等）
+    non_date_keywords = ['fee', 'staking', 'seed', 'total', 'average', 'issuer', 'name', 'aum', 'maximum', 'minimum']
     if date_str.lower() in non_date_keywords:
         return None
     

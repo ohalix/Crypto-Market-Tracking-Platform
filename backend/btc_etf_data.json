@@ -212,7 +212,7 @@
     },
     {
       "date": "12 Mar 2026",
-      "blackrock": 0.0,
+      "blackrock": 46.1,
       "fidelity": 15.3,
       "bitwise": -5.7,
       "ark": 3.0,
@@ -223,39 +223,9 @@
       "wtree": 0.0,
       "grayscale_gb": -9.9,
       "grayscale_btc": 5.0,
-      "total": 7.7
-    },
-    {
-      "date": "Maximum",
-      "blackrock": 1119.9,
-      "fidelity": 473.4,
-      "bitwise": 237.9,
-      "ark": 268.7,
-      "invesco": 63.4,
-      "franklin": 60.9,
-      "valkyrie": 43.4,
-      "vaneck": 118.8,
-      "wtree": 118.5,
-      "grayscale_gb": 102.5,
-      "grayscale_btc": 191.1,
-      "total": 1373.8
-    },
-    {
-      "date": "Minimum",
-      "blackrock": -528.3,
-      "fidelity": -356.6,
-      "bitwise": -280.7,
-      "ark": -327.9,
-      "invesco": -62.0,
-      "franklin": -74.1,
-      "valkyrie": -74.8,
-      "vaneck": -38.4,
-      "wtree": -53.8,
-      "grayscale_gb": -642.5,
-      "grayscale_btc": -318.2,
-      "total": -1113.7
+      "total": 53.8
     }
   ],
   "summary": {},
-  "last_updated": "2026-03-13T11:42:32.898380"
+  "last_updated": "2026-03-13T11:53:45.815968"
 }
