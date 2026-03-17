@@ -1,40 +1,41 @@
-# CryptoMarket Railway 部署配置
+# CryptoMarket Railway Deployment Configuration
 
-## 部署步骤
+## Deployment Steps
 
-### 1. 创建 Railway 账号
-- 访问 https://railway.app
-- 点击 "Login" → 选择 "Continue with GitHub"
-- 授权完成即可
+### 1. Create a Railway Account
+- Visit https://railway.app  
+- Click "Login" → choose "Continue with GitHub"  
+- Complete authorization  
 
-### 2. 创建新项目
-- 点击 "New Project"
-- 选择 "Deploy from GitHub repo"
-- 选择你的 CryptoMarket 仓库（需要先 push 到 GitHub）
+### 2. Create a New Project
+- Click "New Project"  
+- Select "Deploy from GitHub repo"  
+- Choose your CryptoMarket repository (must be pushed to GitHub first)  
 
-### 3. 配置环境变量
-在项目 Settings → Variables 中添加：
+### 3. Configure Environment Variables
+In Project Settings → Variables, add:
+
 ```
 PORT=8000
 ```
 
-### 4. 部署完成
-Railway 会自动检测 Python 项目并部署
+### 4. Deployment
+Railway will automatically detect the Python project and deploy it  
 
-### 5. 获取域名
-- 部署完成后，点击项目 → Settings → Domains
-- 自动生成 `xxx.up.railway.app` 域名
-- 或绑定自定义域名
+### 5. Get Your Domain
+- After deployment, go to Project → Settings → Domains  
+- A domain like `xxx.up.railway.app` will be generated automatically  
+- Or bind a custom domain  
 
-## 注意事项
+## Notes
 
-1. **免费额度**: 每月 $5 或 500 小时运行时间
-2. **休眠机制**: 15 分钟无访问会休眠，下次访问需等待唤醒（约 10-30 秒）
-3. **数据持久化**: 免费版重启后数据会丢失，建议：
-   - 使用 Railway 的 Volume（付费）
-   - 或定期手动更新数据文件
+1. **Free Tier**: $5/month or 500 hours of runtime  
+2. **Sleep Mechanism**: Service sleeps after 15 minutes of inactivity; next request takes ~10–30 seconds to wake  
+3. **Data Persistence**: Data may be lost after restart on the free tier. Recommended:
+   - Use Railway Volumes (paid)  
+   - Or manually update data files regularly  
 
-## 本地开发
+## Local Development
 
 ```bash
 cd backend
@@ -42,4 +43,5 @@ pip install -r requirements.txt
 python main.py
 ```
 
-访问 http://localhost:8000
+Access http://localhost:8000
+
